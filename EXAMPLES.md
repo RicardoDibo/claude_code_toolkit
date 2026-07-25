@@ -1,5 +1,7 @@
 # Exemplo de uso ponta a ponta (resumido)
 
+*[Read this in English](#end-to-end-usage-example-summarized)*
+
 ## Dia 1 — greenfield
 $ /sdd-new app de gestão de projetos com kanban para equipes pequenas
 
@@ -43,3 +45,54 @@ Fase 1: adendo ao PRD (F06, wave nova, regressões a proteger).
 Fases 2-6: artefatos com seção Compatibilidade → guarda de regressão
 → implementação → /commit por estágio → auditoria com db-reader
 provando os CAs via SELECT → manifest ✔.
+
+---
+
+# End-to-end usage example (summarized)
+
+*[Leia isto em Português](#exemplo-de-uso-ponta-a-ponta-resumido)*
+
+## Day 1 — greenfield
+$ /sdd-new kanban-based project management app for small teams
+
+Phase 1: interview (short rounds) → PRD with F01-auth, F02-projects,
+F03-kanban, F04-tasks, F05-notifications; Integration Matrix;
+Waves: 0=[F01], 1=[F02], 2=[F03,F04], 3=[F05]. You approve → manifest.
+Phase 2-3: Wave 0 artifacts + static audit APPROVED.
+Phase 4: feature-implementer implements F01 stage by stage.
+→ report: "Batches ready to commit: stage 1 (migrations),
+stage 2 (routes), stage 3 (middleware+verification)".
+
+$ /commit
+GATE 1: batch 1 staged (db/migrations/001_users.sql, src/models/user.ts)
+        "F01 data foundation; 2 batches remaining". You: ok
+GATE 2: proposed message:
+        feat(auth): add user table and model
+        ...
+        SDD-Feature: F01 / SDD-Stage: 1
+        You: ok → commit. Loop for batches 2 and 3.
+
+Phases 5-6: code-improver (2 findings, you approve 1) → integration
+audit APPROVED → manifest ✔ → /commit docs(sdd) batch → Wave 1.
+
+## Day 12 — bug with screenshot
+$ /debug card disappears from kanban when task is completed [screenshot attached]
+
+Phase 0: screenshot transcription ("PATCH /api/tasks/9f2 → 200; card
+missing from Done column"); user's theory vs contract F04: the contract
+says task.completed is emitted — spec F03 says the board listens for
+board.updated.
+Phase 4: classification = INTEGRATION (Matrix gap: wrong event).
+Phase 5: sdd-feature-author fixes contracts F03/F04 + new scenario →
+feature-implementer applies it → regression suite green.
+$ /commit  → fix(kanban): listen to task.completed ... Refs: debug/BUG-...
+
+## Day 20 — brownfield
+$ /sdd-feature task comments with @user mentions
+
+Phase 0 Discovery: db-reader maps real tasks/users; code-improver
+X-rays the tasks module; as-is contract for notifications. You validate.
+Phase 1: PRD addendum (F06, new wave, regressions to protect).
+Phases 2-6: artifacts with a Compatibility section → regression guard
+→ implementation → /commit per stage → audit with db-reader
+proving ACs via SELECT → manifest ✔.
