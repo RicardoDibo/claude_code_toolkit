@@ -14,13 +14,14 @@ Fase 4: feature-implementer implementa F01 estágio a estágio.
 estágio 2 (rotas), estágio 3 (middleware+verificação)".
 
 $ /commit
-GATE 1: lote 1 staged (db/migrations/001_users.sql, src/models/user.ts)
-        "fundação de dados da F01; restam 2 lotes". Você: ok
-GATE 2: mensagem proposta:
+Plano gravado em docs/commits/COMMITS-20261003-1430.md: 3 lotes, cada um
+com arquivos, justificativa e mensagem pronta, por exemplo:
+        lote 1: db/migrations/001_users.sql, src/models/user.ts
         feat(auth): add user table and model
         ...
         SDD-Feature: F01 / SDD-Stage: 1
-        Você: ok → commit. Loop para os lotes 2 e 3.
+GATE: você revisa o arquivo (pode editar lotes e mensagens) e diz ok
+→ 3 commits em sequência, sem interrupção → arquivo atualizado com os hashes.
 
 Fases 5-6: code-improver (2 achados, você aprova 1) → auditoria de
 integração APROVADA → manifest ✔ → /commit lote docs(sdd) → Wave 1.
@@ -64,13 +65,14 @@ Phase 4: feature-implementer implements F01 stage by stage.
 stage 2 (routes), stage 3 (middleware+verification)".
 
 $ /commit
-GATE 1: batch 1 staged (db/migrations/001_users.sql, src/models/user.ts)
-        "F01 data foundation; 2 batches remaining". You: ok
-GATE 2: proposed message:
+Plan written to docs/commits/COMMITS-20261003-1430.md: 3 batches, each
+with files, rationale and a ready message, for example:
+        batch 1: db/migrations/001_users.sql, src/models/user.ts
         feat(auth): add user table and model
         ...
         SDD-Feature: F01 / SDD-Stage: 1
-        You: ok → commit. Loop for batches 2 and 3.
+GATE: you review the file (you can edit batches and messages) and say ok
+→ 3 commits in sequence, no interruptions → file updated with the hashes.
 
 Phases 5-6: code-improver (2 findings, you approve 1) → integration
 audit APPROVED → manifest ✔ → /commit docs(sdd) batch → Wave 1.

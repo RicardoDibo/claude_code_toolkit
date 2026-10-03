@@ -1,13 +1,17 @@
 ---
 name: conventional-commits
-description: Gera uma mensagem de commit seguindo a especificação Conventional Commits a partir das mudanças atualmente em stage no repositório. Use quando o usuário pedir para escrever, gerar ou rascunhar uma mensagem de commit, mencionar conventional commits, ou após stagear um lote com a skill stage-logical-commits.
+description: Gera mensagens de commit seguindo a especificação Conventional Commits a partir das mudanças em stage ou, no plano do /commit, do diff de cada lote planejado. Use quando o usuário pedir para escrever, gerar ou rascunhar uma mensagem de commit, mencionar conventional commits, ou após stagear um lote com a skill stage-logical-commits.
 ---
 
 # Conventional Commits Generator
 
 ## Procedimento
 
-1. **Leia o que está staged** via Bash: `git diff --staged --stat` e `git diff --staged`. Se não há nada staged, informe e sugira a skill `stage-logical-commits`. A mensagem descreve o QUE ESTÁ NO STAGE — nunca mudanças que você lembra ter feito mas não estão no diff.
+1. **Leia o diff do lote** via Bash:
+   - **Modo avulso**: `git diff --staged --stat` e `git diff --staged`. Se não há nada staged, informe e sugira a skill `stage-logical-commits`.
+   - **Modo plano** (fluxo `/commit`, nada staged ainda): para cada lote, `git diff --stat -- <arquivos do lote>` e `git diff -- <arquivos do lote>`; arquivos untracked não aparecem no diff, então leia-os do disco.
+
+   A mensagem descreve O QUE ESTÁ NO DIFF DO LOTE — nunca mudanças que você lembra ter feito mas não estão nele.
 
 2. **Determine o tipo:**
    | Tipo | Quando |
@@ -35,7 +39,7 @@ description: Gera uma mensagem de commit seguindo a especificação Conventional
 
 7. **Rodapés/trailers**: `Refs:` para issue/ticket se informado. Em SDD, opcionalmente `SDD-Feature: F03` e `SDD-Stage: 2` (rastreie com `git log --grep`). NUNCA inclua `Co-Authored-By: * <noreply@anthropic.com>` nem co-autoria não fornecida explicitamente pelo usuário.
 
-8. **Saída**: mensagem completa em bloco ```text para cópia. Não execute `git commit` — quem decide é o usuário (ou o fluxo /commit, que pede aprovação explícita).
+8. **Saída**: mensagem completa em bloco ```text. No modo avulso, ela vai para o chat, para cópia. No modo plano, vai para a seção do lote no plano `docs/commits/COMMITS-*.md`, e a aprovação é o gate único do `/commit`. Não execute `git commit` — quem decide é o usuário (ou o fluxo /commit, depois que o plano é aprovado).
 
 ## Exemplo
 

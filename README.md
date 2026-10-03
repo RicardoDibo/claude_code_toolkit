@@ -43,7 +43,7 @@ o Haiku não consegue resolver são refeitos com Sonnet.
 | /sdd-feature descrição  | feature em sistema existente (brownfield): Discovery primeiro |
 | /debug descrição+prints | sessão de debug orientada a evidências |
 | /sonar-fix [foco]       | corrige os achados da extensão SonarQube for IDE, lote a lote por regra |
-| /commit [foco]          | lotes lógicos + Conventional Commits com aprovação |
+| /commit [foco]          | lotes lógicos + Conventional Commits num plano em docs/commits/, aprovado uma vez e executado sem interrupções |
 
 ## Integrações entre as peças
 - Estágio do plan.md concluído = lote natural de commit → /commit
@@ -52,6 +52,9 @@ o Haiku não consegue resolver são refeitos com Sonnet.
   dado | integração) e commitada como fix referenciando debug/BUG-*.md
 - /sonar-fix: cada lote verde (testes + diagnósticos limpos) → /commit;
   relatório com falsos positivos em sonar/SONAR-*.md
+- /commit grava todos os lotes e mensagens em docs/commits/COMMITS-*.md;
+  você revisa ou edita o arquivo, aprova uma vez e todos os commits saem
+  em sequência; o arquivo fica como registro dos hashes
 - manifest.md é a máquina de estados: os comandos retomam de onde pararam
 
 ---
@@ -101,7 +104,7 @@ cannot resolve, are redone with Sonnet.
 | /sdd-feature description  | feature in an existing system (brownfield): Discovery first |
 | /debug description+screenshots | evidence-driven debug session |
 | /sonar-fix [focus]        | fixes SonarQube for IDE findings, one batch per rule |
-| /commit [focus]           | logical batches + Conventional Commits with approval |
+| /commit [focus]           | logical batches + Conventional Commits in a plan under docs/commits/, approved once and run without interruptions |
 
 ## Integration between the pieces
 - A completed plan.md stage = natural commit batch → /commit
@@ -110,4 +113,7 @@ cannot resolve, are redone with Sonnet.
   data | integration) and committed as fix referencing debug/BUG-*.md
 - /sonar-fix: each green batch (tests + clean diagnostics) → /commit;
   report with false positives in sonar/SONAR-*.md
+- /commit writes every batch and message to docs/commits/COMMITS-*.md;
+  you review or edit the file, approve once, and all commits run in
+  sequence; the file stays as a record of the hashes
 - manifest.md is the state machine: commands resume where they left off

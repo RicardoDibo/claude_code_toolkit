@@ -1,6 +1,6 @@
 ---
 name: stage-logical-commits
-description: Analisa as mudanças não commitadas do repositório, agrupa em unidades lógicas coesas (vertical slices) e faz o stage de UM lote por vez, preparando commits profissionais. Use quando o usuário tiver várias mudanças acumuladas e pedir para organizar, separar, agrupar ou preparar commits — é o precursor natural da skill conventional-commits.
+description: Analisa as mudanças não commitadas do repositório e agrupa em unidades lógicas coesas (vertical slices) — em modo plano, entrega todos os lotes sem stagear para o plano do /commit em docs/commits/; em modo avulso, faz o stage de UM lote por vez. Use quando o usuário tiver várias mudanças acumuladas e pedir para organizar, separar, agrupar ou preparar commits — é o precursor natural da skill conventional-commits.
 ---
 
 # Logical Commit Stager
@@ -16,7 +16,7 @@ Prepara commits pequenos e coesos a partir de um working directory bagunçado. U
 
 2. **Exclusões (nunca entram em stage):**
    - `CLAUDE.md` (qualquer capitalização)
-   - Diretórios `doc/`, `docs/`, `.claude/`, `.github/`, `.vscode/`
+   - Diretórios `doc/`, `docs/`, `.claude/`, `.github/`, `.vscode/` (inclui os planos do `/commit` em `docs/commits/`)
    - O próprio `.gitignore`
    - Qualquer coisa casando com padrões do `.gitignore` (cheque com `git check-ignore` em caso de dúvida)
    - Arquivos com cara de segredo (`.env*`, `*.pem`, `credentials*`, dumps): além de não stagear, ALERTE o usuário
@@ -32,8 +32,8 @@ Prepara commits pequenos e coesos a partir de um working directory bagunçado. U
 4. **Regras de stage (invioláveis):**
    - NUNCA `git add .`, `git add -A`, `git add -u` nem diretórios inteiros grandes
    - Sempre arquivos individuais: `git add caminho/a caminho/b`
-   - Um lote por invocação; mudanças parciais de um mesmo arquivo pertencendo a lotes diferentes: avise o usuário (hunk staging é interativo demais para automação — proponha o arquivo inteiro no lote dominante, ou deixe-o para stage manual)
+   - Mudanças parciais de um mesmo arquivo pertencendo a lotes diferentes: avise o usuário (hunk staging é interativo demais para automação — proponha o arquivo inteiro no lote dominante, ou deixe-o para stage manual)
 
-5. **Apresente o lote staged**: lista de arquivos + justificativa do agrupamento em 1-2 frases + prévia dos lotes restantes (quantos e o tema de cada um).
-
-6. **Handoff**: recomende invocar a skill `conventional-commits` para gerar a mensagem do lote atual. Após o commit, ofereça stagear o próximo lote.
+5. **Entregue conforme o modo:**
+   - **Modo plano** (usado pelo fluxo `/commit`): NÃO stageie nada. Entregue TODOS os lotes em ordem de dependência — para cada um, arquivos (com novo/modificado/deletado/renomeado), justificativa em 1-2 frases e dependências — mais a lista de exclusões e alertas. Esse material vai para o plano `docs/commits/COMMITS-*.md` (formato em `references/commit-plan-template.md`); o stage acontece só na execução, após a aprovação do plano.
+   - **Modo avulso** (skill invocada diretamente, fora do `/commit`): stageie SOMENTE o primeiro lote, arquivo a arquivo, e apresente: lista de arquivos + justificativa + prévia dos lotes restantes (quantos e o tema de cada um). Recomende a skill `conventional-commits` para a mensagem e, após o commit, ofereça stagear o próximo lote.
