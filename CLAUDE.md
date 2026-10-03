@@ -25,11 +25,12 @@ Um kit de extensões para o Claude Code, sem código de aplicação. Não há bu
 ## Invariantes que atravessam as peças
 
 Ao criar ou editar qualquer peça, preserve estes contratos entre elas:
-- **Agentes nunca commitam.** Eles reportam "lotes prontos para commit", e o commit acontece só na sessão principal via `/commit`, lote a lote e com aprovação do usuário (nunca `git add .`, `--amend` ou `push`).
+- **Agentes nunca commitam.** Eles reportam "lotes prontos para commit", e o commit acontece só na sessão principal via `/commit`, depois que o usuário aprova o plano de lotes em `docs/commits/` (nunca `git add .`, `--amend` ou `push`).
 - **Artefatos em disco são a interface entre as fases e os agentes:**
   - SDD: `PRD.md`, `manifest.md` (a máquina de estados que permite retomar o pipeline) e `features/F0X-*/{contract,spec,plan}.md`;
   - debug: `debug/BUG-*.md`;
-  - Sonar: `sonar/LOTES-*.md` (plano do triager para o fixer) e `sonar/SONAR-*.md` (relatório).
+  - Sonar: `sonar/LOTES-*.md` (plano do triager para o fixer) e `sonar/SONAR-*.md` (relatório);
+  - commits: `docs/commits/COMMITS-*.md` (lotes + mensagens aprovados de uma vez; depois, o registro dos hashes).
 - **Hierarquia de autoridade no SDD:** `contract.md > spec.md > plan.md`. Uma mudança que quebra uma saída prometida exige aprovação do usuário.
 - **Gates explícitos:** cada fase termina com um gate. Nenhuma correção ou implementação começa antes da aprovação correspondente (PRD, auditoria estática, plano de lotes).
 - **Tipos de commit** ligados ao fluxo: `fix` para debug e bugs do Sonar, `refactor` para code smells, `docs(sdd)` como lote final das atualizações de plan/manifest.
