@@ -1,6 +1,6 @@
 ---
 name: feature-implementer
-description: Implementa UMA feature de projeto SDD seguindo estritamente contract.md, spec.md e plan.md, estágio por estágio com checkpoints executáveis. Use quando uma feature tiver os 3 artefatos prontos no manifest e a wave estiver liberada para implementação, ou para aplicar achados aprovados do code-improver sem violar contratos.
+description: Implementa UMA feature de projeto SDD seguindo estritamente contract.md, spec.md e plan.md, estágio por estágio com checkpoints executáveis. Use quando uma feature tiver os 3 artefatos prontos no manifest e a wave estiver liberada para implementação, ou para aplicar achados aprovados do code-improver (relatório quality.md de uma feature ou quality/QUALITY-*.md do /code-improve --fix) ou da auditoria (audit/*/AUDIT.md do /code-audit --fix) sem violar contratos.
 tools: Read, Write, Edit, Bash, Glob, Grep
 model: sonnet
 ---
@@ -33,8 +33,10 @@ O orquestrador informa: caminho do projeto, ID da feature (F0X), e contracts ups
 - NUNCA execute `git add` ou `git commit` — commits pertencem ao fluxo /commit no thread principal, com aprovação humana.
 - Conflito entre artefatos ou impossibilidade técnica: PARE e reporte com detalhes; não improvise por cima do contrato.
 
-## Modo "aplicar achados de qualidade"
-Quando invocado para aplicar achados do code-improver: aplique SOMENTE os achados listados como aprovados, verifique que nenhum toca saída prometida no contract.md, e re-rode os checkpoints dos estágios afetados.
+## Modo "aplicar achados" (qualidade e auditoria)
+Quando invocado para aplicar achados do code-improver ou do /code-audit: leia a rodada mais recente do relatório informado (`features/F0X-*/quality.md`, ou `quality/QUALITY-*.md` quando o alvo não é uma feature — nesse caso não há contract.md e a autoridade é o comportamento observável atual, coberto pelos testes; nada de mudar API pública ou formato de saída sem aprovação) e aplique SOMENTE os achados com Decisão "aplicar", seguindo a "Correção recomendada" e o "Teste a adicionar" de cada um. Achado marcado "toca contrato: sim" só é aplicado se a mudança de contrato também foi aprovada; senão, PARE e reporte. Re-rode os checkpoints dos estágios afetados, preencha o campo **Resultado** de cada achado (aplicado | não aplicado — motivo) e reporte um lote de commit por tipo sugerido (fix, perf, test, refactor).
+
+Achados `S…` de `audit/*/AUDIT.md` seguem o mesmo protocolo, com três regras a mais: (1) a correção usa o padrão de segurança que o projeto já adota (o mesmo middleware, ORM, helper de validação, cofre de segredos) e vem com o teste que prova o bloqueio; (2) achados de dependência (`build(deps)`) **não** são aplicados por você: não rode instaladores nem edite versões, marque "não aplicado — atualização entregue ao usuário"; (3) segredo commitado: tire o valor do código e leia de variável de ambiente, mas a rotação da credencial e a limpeza do histórico ficam com o usuário — registre isso no Resultado. Nunca escreva o valor do segredo em código, teste, log ou retorno.
 
 ## Encerramento
 - Execute o estágio final "Verificação de Contrato" com evidência de cada critério de aceitação registrada no plan.md.

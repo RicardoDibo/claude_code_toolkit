@@ -15,7 +15,7 @@ Você é o maestro do pipeline. Você NÃO faz o trabalho especialista — você
 | Artefatos por feature | skill `sdd-feature-author` | você mesmo, seguindo a skill |
 | Auditoria (estática e integração) | agente `contract-auditor` | subagente |
 | Implementação | agente `feature-implementer` | 1 subagente POR feature, em paralelo dentro da wave |
-| Qualidade de código | agente `code-improver` | subagente, read-only, gera relatório |
+| Qualidade de código | agente `code-improver` | subagente, não edita código, grava `features/F0X-*/quality.md` |
 | Provas de dados | agente `db-reader` | subagente, SELECT-only |
 | Commits | fluxo `/commit` | thread principal, com aprovação do usuário |
 
@@ -43,8 +43,8 @@ Ao receber os relatórios, ofereça ao usuário o fluxo `/commit` com os "lotes 
 **Gate:** todos os plan.md com checkpoints ✔ e estágio "Verificação de Contrato" verde.
 
 ## Fase 5 — Qualidade
-Para cada feature implementada, delegue ao agente `code-improver` (read-only). Apresente o relatório ao usuário; para os achados que ele aprovar, spawne novamente o `feature-implementer` da feature com a instrução de aplicar SOMENTE esses achados, sem violar o contract.md, e re-rodar os checkpoints afetados.
-**Gate:** usuário deu o visto no relatório (aplicando ou dispensando cada achado).
+Para cada feature implementada, delegue ao agente `code-improver` (alvo `feature F0X`, nível `high` salvo pedido do usuário). Ele grava `features/F0X-*/quality.md` com os achados ranqueados por severidade, cada um com cenário de falha e veredito. Apresente a tabela Resumo ao usuário, destacando os achados `crítica` e os que tocam contrato, e registre a decisão de cada achado (aplicar | dispensar) na coluna Decisão do arquivo. Para os achados aprovados, spawne novamente o `feature-implementer` da feature com a instrução de aplicar SOMENTE esses achados, sem violar o contract.md, e re-rodar os checkpoints afetados. Ofereça o fluxo `/commit` com os lotes reportados.
+**Gate:** todo achado da rodada com Decisão preenchida e, nos aplicados, Resultado preenchido.
 
 ## Fase 6 — Auditoria de integração
 Delegue ao `contract-auditor` em modo **integração** para a wave N. Para critérios de aceitação que se provam por dados persistidos, o auditor pode delegar SELECTs ao agente `db-reader` (agora o banco existe). Se REPROVADA: identifique se o gap é de artefato (→ Fase 2) ou de código (→ Fase 4 para a feature específica).

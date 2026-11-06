@@ -15,7 +15,7 @@ Monte o retrato do terreno que a feature vai tocar:
 
 1. **Banco real** — delegue ao agente `db-reader`: tabelas relacionadas ao domínio da feature (INFORMATION_SCHEMA / SHOW), colunas com tipos e constraints, FKs, índices, volumes aproximados e amostras de distribuição quando relevante (ex: valores distintos de um campo status).
 2. **Código real** — usando Glob/Grep, mapeie: módulos que a feature vai tocar ou consumir, convenções (naming, error handling, camadas), pontos de extensão existentes (middlewares, eventos, services).
-3. **Convenções e dívidas da vizinhança** — delegue ao agente `code-improver` nos módulos vizinhos identificados. O relatório serve como raio-X das convenções e riscos da região (não aplique nada agora; é insumo para o spec e o plan).
+3. **Convenções e dívidas da vizinhança** — delegue ao agente `code-improver` em modo `discovery`, com os módulos vizinhos identificados como alvo. O relatório (convenções observadas + dívidas com cenário de falha) serve como raio-X da região: consolide-o no discovery.md e não aplique nada agora; é insumo para o spec e o plan.
 4. **Contratos existentes** — se o projeto já é SDD, leia `PRD.md`, `manifest.md` e os `contract.md` das features vizinhas. Se NÃO é SDD, gere um **contrato as-is** por área tocada: um `features/_asis/<area>/contract.md` de engenharia reversa (entradas/saídas/regras observadas no código e no banco), marcado como "as-is, não aprovado como intenção". Ele vira a referência de compatibilidade.
 
 Produza um `features/F0X-<nome>/discovery.md` consolidando os 4 itens.
@@ -46,8 +46,8 @@ Spawne o agente `feature-implementer` para a feature. Ordem inviolável: guarda 
 **Gate:** checkpoints ✔, incluindo a guarda de regressão ainda verde ao final.
 
 ## Fase 5 — Qualidade
-Agente `code-improver` sobre o código novo E os arquivos existentes alterados. Achados aprovados pelo usuário voltam ao `feature-implementer` para aplicação sem violar contrato nem regressões.
-**Gate:** visto do usuário no relatório.
+Agente `code-improver` (alvo `feature F0X`) sobre o código novo E os arquivos existentes alterados; ele grava `features/F0X-*/quality.md`. Registre a decisão do usuário em cada achado; os aprovados voltam ao `feature-implementer` para aplicação sem violar contrato nem regressões (guarda de regressão verde ao final).
+**Gate:** todo achado da rodada com Decisão preenchida e, nos aplicados, Resultado preenchido.
 
 ## Fase 6 — Auditoria de integração
 `contract-auditor` em modo integração: cenários do contract.md + critérios de regressão, com `db-reader` provando estados persistidos (antes/depois via SELECT).

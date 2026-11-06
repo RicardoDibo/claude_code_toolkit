@@ -20,7 +20,7 @@ Se o spec contradiz o contrato, o contrato vence — reporte a inconsistência a
 ## Ecossistema de agentes (delegue quando disponíveis em .claude/agents/)
 - `feature-implementer` — executa este protocolo para UMA feature. Waves garantem independência: 1 subagente por feature, em paralelo dentro da wave.
 - `contract-auditor` — audita a wave: modo estático antes de codar, modo integração depois. Aprovação em integração desbloqueia a próxima wave.
-- `code-improver` — entre a implementação e a auditoria de integração: revisão read-only de qualidade; achados aprovados pelo usuário voltam ao feature-implementer para aplicação sem violar contrato.
+- `code-improver` — entre a implementação e a auditoria de integração: revisão no molde do /code-review (correção primeiro, depois reúso, simplificação, eficiência, altitude e cobertura de testes), cada achado com cenário de falha e veredito, gravada em `features/F0X-*/quality.md`; achados aprovados pelo usuário voltam ao feature-implementer para aplicação sem violar contrato.
 - `db-reader` — SELECT-only: prova CAs que dependem de estado persistido, na verificação de contrato e na auditoria de integração.
 
 Sem subagentes (Claude.ai), execute os papéis você mesmo, sequencialmente: auditoria estática → features → qualidade → auditoria de integração.
