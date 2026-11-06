@@ -23,7 +23,8 @@ com arquivos, justificativa e mensagem pronta, por exemplo:
 GATE: você revisa o arquivo (pode editar lotes e mensagens) e diz ok
 → 3 commits em sequência, sem interrupção → arquivo atualizado com os hashes.
 
-Fases 5-6: code-improver (2 achados, você aprova 1) → auditoria de
+Fases 5-6: code-improver grava quality.md (Q1 alta/CONFIRMED, Q2
+baixa; você aprova Q1) → feature-implementer aplica → auditoria de
 integração APROVADA → manifest ✔ → /commit lote docs(sdd) → Wave 1.
 
 ## Dia 12 — bug com print
@@ -74,7 +75,8 @@ with files, rationale and a ready message, for example:
 GATE: you review the file (you can edit batches and messages) and say ok
 → 3 commits in sequence, no interruptions → file updated with the hashes.
 
-Phases 5-6: code-improver (2 findings, you approve 1) → integration
+Phases 5-6: code-improver writes quality.md (Q1 high/CONFIRMED, Q2
+low; you approve Q1) → feature-implementer applies it → integration
 audit APPROVED → manifest ✔ → /commit docs(sdd) batch → Wave 1.
 
 ## Day 12 — bug with screenshot
