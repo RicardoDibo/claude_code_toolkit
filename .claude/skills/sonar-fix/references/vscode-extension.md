@@ -1,9 +1,11 @@
-# Referência — SonarQube for IDE (VS Code) como fonte de achados
+# Referência — SonarQube for IDE (VS Code) como verificação complementar
+
+A fonte canônica dos achados é o servidor (`webapi.md`). A extensão entra em dois momentos: **verificar localmente** se o achado sumiu depois de um lote, sem esperar um rescan, e **destravar uma sessão** quando o servidor não está acessível. Ela cobre só o que analisou (arquivos abertos ou salvos), então nunca serve de inventário.
 
 ## Pré-requisitos
 - Extensão **SonarQube for IDE** (ID `SonarSource.sonarlint-vscode`) instalada e ativa.
 - Claude Code rodando dentro do VS Code (extensão do Claude Code ou CLI conectado com `/ide`), para que a ferramenta de diagnósticos da IDE fique disponível.
-- Opcional: **connected mode** configurado para o SonarQube Server/Cloud do time, para que as regras e o quality profile sejam os mesmos do pipeline.
+- Ideal: **connected mode** apontando para o mesmo servidor do pipeline, para que as regras e o quality profile batam com os achados do servidor.
 
 ## Formato dos diagnósticos
 A ferramenta de diagnósticos devolve, por arquivo (URI), uma lista como esta:
@@ -17,9 +19,10 @@ A ferramenta de diagnósticos devolve, por arquivo (URI), uma lista como esta:
 }
 ```
 - **Filtro:** `source` contendo `sonar`, sem diferenciar maiúsculas e minúsculas (versões antigas usam `sonarlint`).
-- **Linha:** `range.start.line` é baseada em 0. Some 1 para citar `arquivo:linha`.
-- **Regra:** `code` = `<repositório>:<regra>`. O número após `S` é o RSPEC.
-- **Severidade:** é a severidade de exibição do VS Code (Error, Warning, Information, Hint), não a do Sonar. Para priorizar, use o tipo da regra (bug, vulnerabilidade, code smell) descrito na página da regra.
+- **Linha:** `range.start.line` é baseada em 0. Some 1 para citar `arquivo:linha` — atenção, o `textRange` do servidor já vem em base 1.
+- **Regra:** `code` = `<repositório>:<regra>`, a mesma chave aceita por `/api/rules/show`.
+- **Severidade:** é a de exibição do VS Code (Error, Warning, Information, Hint), não a do Sonar. Para priorizar, use o tipo/impacto que o servidor devolve.
+- A extensão **não** traz issue key: só o servidor dá isso. Por isso ela não substitui a coleta.
 
 ## Formato colado do painel Problems
 Quando o usuário copia itens do painel Problems, cada item vem aproximadamente assim:
@@ -28,13 +31,9 @@ src/app/service.ts: Remove this useless assignment to variable "x". sonarqube(ty
 ```
 Nesse formato a linha já começa em 1.
 
-## Descrição das regras
-- Web: `https://rules.sonarsource.com/<linguagem>/RSPEC-<número>/` (linguagem: `java`, `typescript`, `javascript`, `python`, `csharp`, `php`, `go`, `kotlin`, `html`, `css`, `docker`…).
-- Na extensão: a ação rápida (lâmpada) do diagnóstico abre a descrição da regra. O usuário pode copiar o texto para o chat.
-
 ## Controle da análise (ações do usuário)
-- A extensão analisa os arquivos ao abrir e ao salvar. Arquivos editados pelo Claude podem precisar ser abertos ou salvos para que os diagnósticos atualizem.
-- Paleta de comandos (Ctrl+Shift+P) → digite `SonarQube` para ver os comandos da versão instalada, por exemplo a análise de arquivos alterados no VCS e a busca de hotspots numa pasta (connected mode).
+- A extensão analisa os arquivos ao abrir e ao salvar. Arquivos editados pelo Claude podem precisar ser abertos ou salvos para que os diagnósticos atualizem — por isso "diagnóstico indisponível ou desatualizado" nunca é tratado como falha de lote.
+- Paleta de comandos (Ctrl+Shift+P) → digite `SonarQube` para ver os comandos da versão instalada, por exemplo a análise dos arquivos alterados no VCS.
 - View **SonarQube** na barra lateral: status do connected mode, lista de hotspots e regras.
 
 ## Log da extensão
