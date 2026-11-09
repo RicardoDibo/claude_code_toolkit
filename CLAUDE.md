@@ -33,7 +33,7 @@ Ao criar ou editar qualquer peça, preserve estes contratos entre elas:
   - qualidade: `features/F0X-*/quality.md` (achados do code-improver, decisão do usuário e resultado do feature-implementer) ou `quality/QUALITY-*.md` fora de uma feature;
   - auditoria: `audit/<AAAA-MM-DD>-<escopo>/` com `architecture.md`, `coverage-ledger.md`, `candidates-*.md`, `raw/` (saída dos scanners) e `AUDIT.md` (relatório com Decisão e Resultado);
   - debug: `debug/BUG-*.md`;
-  - Sonar: `sonar/LOTES-*.md` (plano do triager para o fixer) e `sonar/SONAR-*.md` (relatório);
+  - Sonar: `docs/sonarqube/LOTES-*.md` (plano do triager para o fixer) e `docs/sonarqube/SONAR-*.md` (relatório);
   - commits: `docs/commits/COMMITS-*.md` (lotes + mensagens aprovados de uma vez; depois, o registro dos hashes).
 - **Hierarquia de autoridade no SDD:** `contract.md > spec.md > plan.md`. Uma mudança que quebra uma saída prometida exige aprovação do usuário.
 - **Gates explícitos:** cada fase termina com um gate. Nenhuma correção ou implementação começa antes da aprovação correspondente (PRD, auditoria estática, plano de lotes, comandos de scanner do /code-audit).
